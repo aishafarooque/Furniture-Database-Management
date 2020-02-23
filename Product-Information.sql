@@ -290,7 +290,7 @@ SELECT *
 FROM Orders O
 WHERE O.Order_Date > '24/Sep/10';
 
---6. What furniture does COSC3380 carry that isn’t made of cherry? 
+--6. What furniture does COSC3380 carry that isnÂ’t made of cherry? 
 SELECT *
 FROM Product P
 WHERE NOT P.Product_Finish = 'Cherry';
