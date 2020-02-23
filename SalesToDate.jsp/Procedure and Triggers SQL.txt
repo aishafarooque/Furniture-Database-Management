@@ -1,0 +1,60 @@
+/*Create a simple procedure ProductLineSale, 
+to be used by that will set a sale price to the existing Product table 
+in the COSC3380 Database by adding a new column, SalePrice DECIMAL (6,2), 
+that will hold the sale price for the products:*/
+
+cl scr;
+DROP PROCEDURE ProductLineSale;
+
+CREATE OR REPLACE PROCEDURE ProductLineSale 
+AS 
+BEGIN 
+    EXECUTE IMMEDIATE 'ALTER TABLE Product ADD SalePrice DECIMAL (6,2)';
+    
+    EXECUTE IMMEDIATE 'UPDATE Product 
+    SET Product.SalePrice = Product.Product_Standard_Price - (Product.Product_Standard_Price * 0.10)
+    WHERE Product.Product_Standard_Price >= 400';
+    
+    EXECUTE IMMEDIATE 'UPDATE Product 
+    SET Product.SalePrice =  Product.Product_Standard_Price - (Product.Product_Standard_Price * 0.15)
+    WHERE Product.Product_Standard_Price <  400';
+
+END;
+/
+
+/*Drop the column if it exists*/
+ALTER TABLE Product
+DROP COLUMN SalePrice;
+
+/*Run the stored procedure*/
+EXEC ProductLineSale;   
+
+SELECT * FROM Product;
+
+
+/*2. After creating a new table, PriceUpdates, write a trigger that enters each
+product when it is updated, the date that the change was made, and the new 
+standard price that was entered. 
+Write and run the procedure StandardPriceUpdate */
+
+cl scr;
+DROP TRIGGER StandardPriceUpdate;
+CREATE TRIGGER StandardPriceUpdate
+AFTER
+UPDATE OF Product_Standard_Price ON Product
+REFERENCING NEW AS new
+FOR EACH ROW 
+BEGIN
+    INSERT INTO Price_Updates
+    VALUES (:old.Product_ID, SYSDATE, :old.Product_Standard_Price, :new.Product_Standard_Price);
+END;
+/
+
+/*Do a sample update to test the trigger*/
+UPDATE Product P
+SET P.Product_Standard_Price = 420
+WHERE P.Product_ID = 2;
+
+
+/*Price Update after Updating Product*/
+SELECT * FROM Price_Updates;
