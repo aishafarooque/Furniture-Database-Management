@@ -2,4 +2,4 @@ Product-Information.sql stores information from a furniture seller. The tables s
 
 In the folder, Project3, the above data is displayed on a JSP Web Page.
 
-![ScreenShot]<a href="https://aishafarooque.github.io/home/images/jspPage.png"> </a>
+![ScreenShot](https://github.com/aishafarooque/home/blob/master/images/jspPage.png?raw=true)
